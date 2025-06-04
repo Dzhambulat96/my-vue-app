@@ -1,10 +1,19 @@
 <script setup>
+import { inject } from 'vue'
 import Card from './Card.vue'
 defineProps({
   items: Array,
 })
-const onClickAdd = () => {
-  alert('asdasd')
+
+const emit = defineEmits(['addToFavorite'])
+
+const addToFavorite = inject('addToFavorite')
+const onClickFavorite = () => {
+  const obj = {
+    ...props,
+    parentId: props.id,
+  }
+  addToFavorite(obj)
 }
 </script>
 
@@ -13,10 +22,12 @@ const onClickAdd = () => {
     <Card
       v-for="item in items"
       :key="item.id"
+      :id="item.id"
       :price="item.price"
       :title="item.title"
       :image-url="item.imageUrl"
-      :onClickAdd="onClickAdd"
+      :onClickFavorite="() => emit('addToFavorite', item)"
+      :isFavorite="item.isFavorite"
     />
   </div>
 </template>
